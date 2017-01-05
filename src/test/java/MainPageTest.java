@@ -58,7 +58,7 @@ class MainPageTest {
         //Verify that each product returned has the search query in the text, and is a valid search result
         for(int i = 0; i < results.size(); i++){
             System.out.println("found \"" + results.get(i).getText().toLowerCase() + "\" in the element. Comparing with the search for \"" + searchQuery.toLowerCase() + "\"");
-            Assert.assertTrue(results.get(i).getText().toLowerCase().contains(searchQuery.toLowerCase()));
+            Assert.assertTrue("the result page string does not match the search term",results.get(i).getText().toLowerCase().contains(searchQuery.toLowerCase()));
         }
     }
 
@@ -75,48 +75,57 @@ class MainPageTest {
 
         //Verify that the cart object contains a dollar value
         System.out.println("We have added products worth " + cartValue);
-        Assert.assertTrue(cartValue.contains("$"));
+        Assert.assertTrue("the cart does not contain a dollar value",cartValue.contains("$"));
 
     }
 
     @Test
-    void yetAnotherTest4(){
+    void verifyNavBarLinks(){
+         List<WebElement> navBarLinks = driver.findElements(By.xpath(".//*[@id='header-navbar']//img"));
+         int unknown = 0;
+         for(int i = 0; i < navBarLinks.size();i++){
+             String titleText = navBarLinks.get(i).getAttribute("title");
+
+             switch (titleText){
+
+                 case "New & Exclusive":
+                     break;
+                 case "Warhammer Age of Sigmar":
+                     break;
+                 case "Warhammer 40,000":
+                     break;
+                 case "The Hobbit":
+                     break;
+                 case "Painting & Modelling":
+                     break;
+                 case "Boxed Games":
+                     break;
+                 default:
+                    unknown++;
+             }
+         }
+
+         //Verify the Navigation bar does not have any unknown or distorted header links
+         Assert.assertTrue("unknown element is present in the nvarbar header",unknown == 0);
 
     }
 
     @Test
-    void stillAnotherTest5(){
+    void verifyHobbitMenuAfterHobbitLink(){
+        driver.findElement(By.cssSelector("img[title='The Hobbit']")).click();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        List<WebElement> menuBar = driver.findElements(By.xpath(".//h3[contains(@id,'dimension')]//button"));
+        int menuCounter = 0;
+        for(int i = 0; i < menuBar.size();i++){
+            String menuText = menuBar.get(i).getText().toLowerCase();
+            if (menuText.contains("hobbit")) {
+                menuCounter++;
+            }
+        }
+
+        Assert.assertTrue("The menu options does not contain the word Hobbit",menuCounter > 0);
 
     }
-
-    @Test
-    void stillAnotherTest6(){
-
-    }
-
-    @Test
-    void stillAnotherTest7(){
-
-    }
-
-    @Test
-    void stillAnotherTest8(){
-
-    }
-
-    @Test
-    void stillAnotherTest9(){
-
-    }
-
-    @Test
-    void stillAnotherTest10(){
-
-    }
-
-
-
-
 
 
 }
